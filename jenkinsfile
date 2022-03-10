@@ -1,0 +1,25 @@
+node {
+    stage('Preparation') { // for display purposes
+        // Get some code from a GitHub repository
+        git 'https://github.com/AsifEnglender/firstJava'
+     
+    }
+
+    stage('build') {
+                sh 'git config --global user.name "AsifEnglender"'
+                sh 'git config --global user.email "asif.englender@gmail.com"'
+                sh 'pwd'
+                sh 'sudo -s javac -d test.jar HelloWorld.java'
+                sh 'git add .'
+                sh 'git commit -m "ya"'
+              
+                withCredentials([usernamePassword(credentialsId: 'yes', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
+                        
+                        sh('git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/AsifEnglender/firstJava.git')
+                        sh ('git tag -a $BUILD_NUMBER -m "test"')
+                    }
+                
+
+            }
+        }
+    
